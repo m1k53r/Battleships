@@ -42,4 +42,15 @@ async void ReadAndWrite()
     Console.WriteLine($"{deserialize.data}");
 }
 
-void Matchmaking() { }
+async void Matchmaking() 
+{
+    await Utilities.SendRequest(stream, Operation.Matchmaking, "");
+    var deserialize = await Utilities.WaitForResponse(stream);
+    Console.WriteLine(deserialize.data);
+    if (deserialize.data == "")
+    {
+        Console.WriteLine(deserialize.message);
+        deserialize = await Utilities.WaitForResponse(stream);
+        Console.WriteLine(deserialize.data);
+    }
+}

@@ -11,7 +11,9 @@ namespace Battleships.Backend
 {
     internal class Server
     {
-        public static Dictionary<TcpClient, string> clients = new();
+        public static Dictionary<TcpClient, ClientInfo> clients = new();
+        public static TcpClient? WaitingClient = null;
+        public static List<Lobby> lobbies = new();
         TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), 8000);
         public void Start()
         {
@@ -23,7 +25,7 @@ namespace Battleships.Backend
             while (true)
             {
                 TcpClient client = server.AcceptTcpClient();
-                clients.Add(client, Guid.NewGuid().ToString());
+                clients.Add(client, new ClientInfo(Guid.NewGuid().ToString(), "user", false));
                 Console.WriteLine("Client connected");
                 PrintConnectedClients();
 
@@ -49,7 +51,7 @@ namespace Battleships.Backend
             Console.WriteLine("Connected clients:");
             foreach (var client in clients)
             {
-                Console.WriteLine(client.Value);
+                Console.WriteLine(client.Value.uuid);
             }
         }
         private async void HandleClientRequest(NetworkStream stream, TcpClient client)
@@ -58,6 +60,7 @@ namespace Battleships.Backend
             {
                 while (client.Connected)
                 {
+                    RemoveDisconnectedClients(); 
                     var incoming = await Utilities.WaitForRequest(stream);
                     Console.WriteLine(incoming.data);
 
@@ -67,7 +70,7 @@ namespace Battleships.Backend
                             HandleReadWrite(stream);
                             break;
                         case Operation.Matchmaking:
-                            HandleMatchmaking();
+                            HandleMatchmaking(stream, client);
                             break;
                         default:
                             HandleUnknown(stream);
@@ -79,19 +82,42 @@ namespace Battleships.Backend
             {
                 HandleException(stream);
             }
-            finally
-            { 
-                RemoveDisconnectedClients(); 
-            }
         }
         private async void HandleReadWrite(NetworkStream stream)
         {
             var message = $"📅 {DateTime.Now} 🕛";
             await Utilities.SendResponse(stream, Status.Success, message);
         }
-        private void HandleMatchmaking()
+        private async void HandleMatchmaking(NetworkStream stream, TcpClient client)
         {
+            if (clients[client].isPlaying)
+            {
+                await Utilities.SendResponse(stream, Status.Failure, "", 
+                    "Client is already playing!");
+                return;
+            }
 
+            if (WaitingClient is null || !WaitingClient.Connected)
+            {
+                WaitingClient = client;
+                await Utilities.SendResponse(stream, Status.Success, "", 
+                    "Waiting for opponent...");
+                return;
+            }
+
+            var waitingClientStream = WaitingClient.GetStream();
+
+            lobbies.Add(new Lobby("lobby", new List<TcpClient>() { client, WaitingClient}));
+
+            await Utilities.SendResponse(stream, Status.Success, 
+                clients[WaitingClient].uuid);
+            await Utilities.SendResponse(waitingClientStream, Status.Success, 
+                clients[client].uuid);
+
+            clients[WaitingClient].isPlaying = true;
+            clients[client].isPlaying = true;
+
+            WaitingClient = null;
         }
         private async void HandleUnknown(NetworkStream stream)
         {
