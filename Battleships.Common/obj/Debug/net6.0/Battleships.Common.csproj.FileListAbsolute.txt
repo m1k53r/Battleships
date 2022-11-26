@@ -1,0 +1,17 @@
+C:\Users\mikob\source\repos\Battleships\Battleships.Common\obj\Debug\net6.0\Battleships.Common.csproj.AssemblyReference.cache
+C:\Users\mikob\source\repos\Battleships\Battleships.Common\obj\Debug\net6.0\Battleships.Common.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\mikob\source\repos\Battleships\Battleships.Common\obj\Debug\net6.0\Battleships.Common.AssemblyInfoInputs.cache
+C:\Users\mikob\source\repos\Battleships\Battleships.Common\obj\Debug\net6.0\Battleships.Common.AssemblyInfo.cs
+C:\Users\mikob\source\repos\Battleships\Battleships.Common\obj\Debug\net6.0\Battleships.Common.csproj.CoreCompileInputs.cache
+C:\Users\mikob\source\repos\Battleships\Battleships.Common\bin\Debug\net6.0\Battleships.Common.exe
+C:\Users\mikob\source\repos\Battleships\Battleships.Common\bin\Debug\net6.0\Battleships.Common.deps.json
+C:\Users\mikob\source\repos\Battleships\Battleships.Common\bin\Debug\net6.0\Battleships.Common.runtimeconfig.json
+C:\Users\mikob\source\repos\Battleships\Battleships.Common\bin\Debug\net6.0\Battleships.Common.dll
+C:\Users\mikob\source\repos\Battleships\Battleships.Common\bin\Debug\net6.0\Battleships.Common.pdb
+C:\Users\mikob\source\repos\Battleships\Battleships.Common\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\mikob\source\repos\Battleships\Battleships.Common\obj\Debug\net6.0\Battleships.Common.csproj.CopyComplete
+C:\Users\mikob\source\repos\Battleships\Battleships.Common\obj\Debug\net6.0\Battleships.Common.dll
+C:\Users\mikob\source\repos\Battleships\Battleships.Common\obj\Debug\net6.0\refint\Battleships.Common.dll
+C:\Users\mikob\source\repos\Battleships\Battleships.Common\obj\Debug\net6.0\Battleships.Common.pdb
+C:\Users\mikob\source\repos\Battleships\Battleships.Common\obj\Debug\net6.0\Battleships.Common.genruntimeconfig.cache
+C:\Users\mikob\source\repos\Battleships\Battleships.Common\obj\Debug\net6.0\ref\Battleships.Common.dll

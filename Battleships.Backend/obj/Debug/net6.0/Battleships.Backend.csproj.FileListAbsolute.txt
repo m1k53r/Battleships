@@ -13,3 +13,10 @@ C:\Users\mikob\source\repos\Battleships\Battleships.Backend\obj\Debug\net6.0\ref
 C:\Users\mikob\source\repos\Battleships\Battleships.Backend\obj\Debug\net6.0\Battleships.Backend.pdb
 C:\Users\mikob\source\repos\Battleships\Battleships.Backend\obj\Debug\net6.0\Battleships.Backend.genruntimeconfig.cache
 C:\Users\mikob\source\repos\Battleships\Battleships.Backend\obj\Debug\net6.0\ref\Battleships.Backend.dll
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\bin\Debug\net6.0\Battleships.Common.deps.json
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\bin\Debug\net6.0\Battleships.Common.runtimeconfig.json
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\bin\Debug\net6.0\Battleships.Common.exe
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\bin\Debug\net6.0\Battleships.Common.dll
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\bin\Debug\net6.0\Battleships.Common.pdb
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\obj\Debug\net6.0\Battleships.Backend.csproj.CopyComplete

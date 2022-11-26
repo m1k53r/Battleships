@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Net;
+using Battleships.Common;
 
 namespace Battleships.Backend
 {
@@ -24,6 +25,7 @@ namespace Battleships.Backend
                 TcpClient client = server.AcceptTcpClient();
                 clients.Add(client, Guid.NewGuid().ToString());
                 Console.WriteLine("Client connected");
+                PrintConnectedClients();
 
                 NetworkStream stream = client.GetStream();
 
@@ -56,30 +58,50 @@ namespace Battleships.Backend
             {
                 while (client.Connected)
                 {
-                    PrintConnectedClients();
+                    var incoming = await Utilities.WaitForRequest(stream);
+                    Console.WriteLine(incoming.data);
 
-                    var buffer = new byte[1024];
-                    int received = await stream.ReadAsync(buffer);
-
-                    var incoming = Encoding.UTF8.GetString(buffer, 0, received);
-                    Console.WriteLine($"{incoming}");
-
-                    if (incoming == "hi")
+                    switch (incoming.operation)
                     {
-                        var message = $"📅 {DateTime.Now} 🕛";
-                        var dateTimeBytes = Encoding.UTF8.GetBytes(message);
-                        await stream.WriteAsync(dateTimeBytes);
-
-                        Console.WriteLine($"{message}");
-                    }
-                    else
-                    {
-                        await stream.WriteAsync(Encoding.UTF8.GetBytes("Unknown format"));
+                        case Operation.ReadWrite:
+                            HandleReadWrite(stream);
+                            break;
+                        case Operation.Matchmaking:
+                            HandleMatchmaking();
+                            break;
+                        default:
+                            HandleUnknown(stream);
+                            break;
                     }
                 }
             }
-            catch (Exception) { }
-            finally { RemoveDisconnectedClients(); }
+            catch (Exception)
+            {
+                HandleException(stream);
+            }
+            finally
+            { 
+                RemoveDisconnectedClients(); 
+            }
+        }
+        private async void HandleReadWrite(NetworkStream stream)
+        {
+            var message = $"📅 {DateTime.Now} 🕛";
+            await Utilities.SendResponse(stream, Status.Success, message);
+        }
+        private void HandleMatchmaking()
+        {
+
+        }
+        private async void HandleUnknown(NetworkStream stream)
+        {
+            await Utilities.SendResponse(stream, Status.Failure,
+                "Error", "Input was not in a correct format");
+        }
+        private async void HandleException(NetworkStream stream)
+        {
+            await Utilities.SendResponse(stream, Status.Failure,
+                "Error", "Unexpected error");
         }
     }
 }

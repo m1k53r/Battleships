@@ -1,5 +1,8 @@
 ﻿using System.Net.Sockets;
 using System.Text;
+using Newtonsoft.Json;
+using Battleships.Common;
+using System.Buffers;
 
 using var client = new TcpClient();
 client.Connect("127.0.0.1", 8000);
@@ -26,19 +29,17 @@ while (true)
     }
 }
 
-async void ReadAndWrite(){
+async void ReadAndWrite()
+{
     Console.WriteLine("Data: ");
     var input = Console.ReadLine();
-    await stream.WriteAsync(Encoding.UTF8.GetBytes(input));
+    await Utilities.SendRequest(stream, Operation.ReadWrite, input);
 
     Console.WriteLine("Sent data");
     Console.WriteLine("Trying to read data");
 
-    var buffer = new byte[1024];
-    int received = await stream.ReadAsync(buffer);
-
-    var message = Encoding.UTF8.GetString(buffer, 0, received);
-    Console.WriteLine($"{message}");
+    var deserialize = await Utilities.WaitForResponse(stream);
+    Console.WriteLine($"{deserialize.data}");
 }
 
-async void Matchmaking() { }
+void Matchmaking() { }
