@@ -1,0 +1,15 @@
+C:\Users\mikob\source\repos\Battleships\Battleships.ClientTests\bin\Debug\net6.0\Battleships.ClientTests.exe
+C:\Users\mikob\source\repos\Battleships\Battleships.ClientTests\bin\Debug\net6.0\Battleships.ClientTests.deps.json
+C:\Users\mikob\source\repos\Battleships\Battleships.ClientTests\bin\Debug\net6.0\Battleships.ClientTests.runtimeconfig.json
+C:\Users\mikob\source\repos\Battleships\Battleships.ClientTests\bin\Debug\net6.0\Battleships.ClientTests.dll
+C:\Users\mikob\source\repos\Battleships\Battleships.ClientTests\bin\Debug\net6.0\Battleships.ClientTests.pdb
+C:\Users\mikob\source\repos\Battleships\Battleships.ClientTests\obj\Debug\net6.0\Battleships.ClientTests.csproj.AssemblyReference.cache
+C:\Users\mikob\source\repos\Battleships\Battleships.ClientTests\obj\Debug\net6.0\Battleships.ClientTests.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\mikob\source\repos\Battleships\Battleships.ClientTests\obj\Debug\net6.0\Battleships.ClientTests.AssemblyInfoInputs.cache
+C:\Users\mikob\source\repos\Battleships\Battleships.ClientTests\obj\Debug\net6.0\Battleships.ClientTests.AssemblyInfo.cs
+C:\Users\mikob\source\repos\Battleships\Battleships.ClientTests\obj\Debug\net6.0\Battleships.ClientTests.csproj.CoreCompileInputs.cache
+C:\Users\mikob\source\repos\Battleships\Battleships.ClientTests\obj\Debug\net6.0\Battleships.ClientTests.dll
+C:\Users\mikob\source\repos\Battleships\Battleships.ClientTests\obj\Debug\net6.0\refint\Battleships.ClientTests.dll
+C:\Users\mikob\source\repos\Battleships\Battleships.ClientTests\obj\Debug\net6.0\Battleships.ClientTests.pdb
+C:\Users\mikob\source\repos\Battleships\Battleships.ClientTests\obj\Debug\net6.0\Battleships.ClientTests.genruntimeconfig.cache
+C:\Users\mikob\source\repos\Battleships\Battleships.ClientTests\obj\Debug\net6.0\ref\Battleships.ClientTests.dll

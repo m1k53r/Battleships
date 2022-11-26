@@ -1,0 +1,15 @@
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\bin\Debug\net6.0\Battleships.Backend.exe
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\bin\Debug\net6.0\Battleships.Backend.deps.json
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\bin\Debug\net6.0\Battleships.Backend.runtimeconfig.json
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\bin\Debug\net6.0\Battleships.Backend.dll
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\bin\Debug\net6.0\Battleships.Backend.pdb
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\obj\Debug\net6.0\Battleships.Backend.csproj.AssemblyReference.cache
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\obj\Debug\net6.0\Battleships.Backend.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\obj\Debug\net6.0\Battleships.Backend.AssemblyInfoInputs.cache
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\obj\Debug\net6.0\Battleships.Backend.AssemblyInfo.cs
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\obj\Debug\net6.0\Battleships.Backend.csproj.CoreCompileInputs.cache
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\obj\Debug\net6.0\Battleships.Backend.dll
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\obj\Debug\net6.0\refint\Battleships.Backend.dll
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\obj\Debug\net6.0\Battleships.Backend.pdb
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\obj\Debug\net6.0\Battleships.Backend.genruntimeconfig.cache
+C:\Users\mikob\source\repos\Battleships\Battleships.Backend\obj\Debug\net6.0\ref\Battleships.Backend.dll
