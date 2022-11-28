@@ -1,18 +1,18 @@
 ﻿Battleships
 1.0.0.0
 
-winexe
+exe
 C#
 .cs
-C:\Users\mikob\source\repos\Battleships\Battleships\obj\Debug\net6.0-windows\
+C:\Users\gracj\source\repos\Battleships\Battleships\obj\Debug\net6.0-windows\
 Battleships
 none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
-C:\Users\mikob\source\repos\Battleships\Battleships\App.xaml
+C:\Users\gracj\source\repos\Battleships\Battleships\App.xaml
 11407045341
 
-5707110759
+11653570441
 194-1103864946
 MainWindow.xaml;
 

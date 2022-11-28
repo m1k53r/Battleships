@@ -8,24 +8,19 @@
     "net6.0-windows7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\mikob\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\gracj\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\mikob\\source\\repos\\Battleships\\Battleships\\Battleships.csproj",
+      "projectUniqueName": "C:\\Users\\gracj\\Source\\Repos\\Battleships\\Battleships\\Battleships.csproj",
       "projectName": "Battleships",
-      "projectPath": "C:\\Users\\mikob\\source\\repos\\Battleships\\Battleships\\Battleships.csproj",
-      "packagesPath": "C:\\Users\\mikob\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\mikob\\source\\repos\\Battleships\\Battleships\\obj\\",
+      "projectPath": "C:\\Users\\gracj\\Source\\Repos\\Battleships\\Battleships\\Battleships.csproj",
+      "packagesPath": "C:\\Users\\gracj\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\gracj\\Source\\Repos\\Battleships\\Battleships\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\mikob\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\gracj\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
