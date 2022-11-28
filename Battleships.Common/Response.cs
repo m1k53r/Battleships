@@ -4,6 +4,9 @@
     {
         Success,
         Failure,
+        Creation,
+        Join,
+        Message,
     }
     public class Response
     {

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Net;
 using Battleships.Common;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Battleships.Backend
 {
@@ -71,7 +72,10 @@ namespace Battleships.Backend
                             HandleReadWrite(stream);
                             break;
                         case Operation.Matchmaking:
-                            HandleMatchmaking(stream, client);
+                            HandleMatchmaking(stream, client, incoming.data);
+                            break;
+                        case Operation.Message:
+                            HandleMessage(stream, client, incoming.data);
                             break;
                         default:
                             HandleUnknown(stream);
@@ -89,8 +93,9 @@ namespace Battleships.Backend
             var message = $"📅 {DateTime.Now} 🕛";
             await Utilities.SendResponse(stream, Status.Success, message);
         }
-        private async void HandleMatchmaking(NetworkStream stream, ClientInfo client)
+        private async void HandleMatchmaking(NetworkStream stream, ClientInfo client, string data)
         {
+            RemoveDeadLobbies();
             if (client.isPlaying)
             {
                 await Utilities.SendResponse(stream, Status.Failure, "", 
@@ -98,34 +103,45 @@ namespace Battleships.Backend
                 return;
             }
 
-            if (waitingClient is null || !waitingClient.tcpClient.Connected)
+            var lobbyName = FindOpenLobbies();
+            if (lobbyName == null)
             {
-                waitingClient = client;
-                await Utilities.SendResponse(stream, Status.Success, "", 
+                await Utilities.SendResponse(stream, Status.Creation, CreateLobby(client, data), 
                     "Waiting for opponent...");
                 return;
             }
 
-            var waitingClientStream = waitingClient.tcpClient.GetStream();
+            var lobby = lobbies[lobbyName];
+            lobby.Join(client, data);
 
-            var lobbyName = Path.GetRandomFileName();
-            while (lobbies.ContainsKey(lobbyName))
+            lobby.players.Keys.ToList().ForEach(async x =>
             {
-                lobbyName = Path.GetRandomFileName();
+                x.isPlaying = true;
+                await Utilities.SendResponse(x.tcpClient.GetStream(), Status.Join, lobbyName);
+                Console.WriteLine(lobby.players[x][1]);
+            });
+        }
+        private async void HandleMessage(NetworkStream stream, ClientInfo client, string data)
+        {
+            if (!client.isPlaying || lobbies.Count == 0)
+            {
+                await Utilities.SendResponse(stream, Status.Failure, "Error", 
+                    "There is no one to send message to");
+                return;
             }
 
-            lobbies.Add(lobbyName, new Lobby(new Dictionary<ClientInfo, List<int>>() {
-                { client, new List<int>() },
-                { waitingClient, new List<int>() },
-            }));
+            Console.WriteLine(data);
+            if (!data.Contains(":"))
+            {
+                await Utilities.SendResponse(stream, Status.Failure, "Error", 
+                    "Wrong data format");
+                return;
+            }
 
-            await Utilities.SendResponse(stream, Status.Success, lobbyName);
-            await Utilities.SendResponse(waitingClientStream, Status.Success, lobbyName);
+            var message = data.Split(":");
 
-            waitingClient.isPlaying = true;
-            client.isPlaying = true;
-
-            waitingClient = null;
+            var opponent = lobbies[message.First()].players.Where(x => x.Key != client).First();
+            await Utilities.SendResponse(opponent.Key.tcpClient.GetStream(), Status.Message, message.Last());
         }
         private async void HandleUnknown(NetworkStream stream)
         {
@@ -136,6 +152,47 @@ namespace Battleships.Backend
         {
             await Utilities.SendResponse(stream, Status.Failure,
                 "Error", "Unexpected error");
+        }
+        private string CreateLobby(ClientInfo host, string data)
+        {
+            var lobbyName = Path.GetRandomFileName();
+            while (lobbies.ContainsKey(lobbyName))
+            {
+                lobbyName = Path.GetRandomFileName().Replace(".", "");
+            }
+
+            lobbies.Add(lobbyName, new Lobby(host, data));
+
+            return lobbyName;
+        }
+        private string? FindOpenLobbies()
+        {
+
+            foreach (var lobby in lobbies)
+            {
+                if (lobby.Value.players.Count == 1)
+                {
+                    return lobby.Key;
+                }
+            }
+            return null;
+        }
+        private void RemoveDeadLobbies()
+        {
+            List<string> lobbyNames = new();
+            foreach (var lobby in lobbies)
+            {
+                var players = lobby.Value.players;
+                if (players.Count == 0 || 
+                    players.Any(x => !x.Key.tcpClient.Connected))
+                {
+                    lobbyNames.Add(lobby.Key); 
+                }
+            }
+            foreach (var lobbyName in lobbyNames)
+            {
+                lobbies.Remove(lobbyName);
+            }
         }
     }
 }

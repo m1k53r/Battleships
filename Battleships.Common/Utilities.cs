@@ -35,7 +35,6 @@ namespace Battleships.Common
                 return false;
             }
             return true;
-
         }
         public static async Task<Response> WaitForResponse(NetworkStream stream)
         {

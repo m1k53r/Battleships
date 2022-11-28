@@ -5,6 +5,7 @@
         Unknown,
         ReadWrite,
         Matchmaking,
+        Message,
     }
     public class Request
     {

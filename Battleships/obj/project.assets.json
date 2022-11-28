@@ -8,23 +8,23 @@
     "net6.0-windows7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\mikolaj\\.nuget\\packages\\": {},
+    "C:\\Users\\mikob\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\repos\\Battleships\\Battleships\\Battleships.csproj",
+      "projectUniqueName": "C:\\Users\\mikob\\source\\repos\\Battleships\\Battleships\\Battleships.csproj",
       "projectName": "Battleships",
-      "projectPath": "C:\\repos\\Battleships\\Battleships\\Battleships.csproj",
-      "packagesPath": "C:\\Users\\mikolaj\\.nuget\\packages\\",
-      "outputPath": "C:\\repos\\Battleships\\Battleships\\obj\\",
+      "projectPath": "C:\\Users\\mikob\\source\\repos\\Battleships\\Battleships\\Battleships.csproj",
+      "packagesPath": "C:\\Users\\mikob\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\mikob\\source\\repos\\Battleships\\Battleships\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\mikolaj\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\mikob\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -33,7 +33,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -70,7 +69,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
       }
     }
   }
