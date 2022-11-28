@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "bcYVzG+O/3bBRwqgId0D9hGn/ms8wVOKfbxLWs90/VrUWDoOYc969GIBZNt0Irfp/y/riqkA5jrUFeuuFIOUAw==",
+  "dgSpecHash": "IunVvJkPjGDroPlSkm0fj8pgeK5ZxP3SVsMeFATsqMvytfACgzy56YIHel9p5OZu5Zg1qIcNnqNDCBp4cNEe2A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\mikob\\source\\repos\\Battleships\\Battleships.Common\\Battleships.Common.csproj",
+  "projectFilePath": "C:\\repos\\Battleships\\Battleships.Common\\Battleships.Common.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\mikob\\.nuget\\packages\\newtonsoft.json\\13.0.2\\newtonsoft.json.13.0.2.nupkg.sha512"
+    "C:\\Users\\mikolaj\\.nuget\\packages\\newtonsoft.json\\13.0.2\\newtonsoft.json.13.0.2.nupkg.sha512"
   ],
   "logs": []
 }

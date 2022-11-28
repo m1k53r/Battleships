@@ -12,8 +12,8 @@ namespace Battleships.Backend
     internal class Server
     {
         public static Dictionary<TcpClient, ClientInfo> clients = new();
-        public static TcpClient? WaitingClient = null;
-        public static List<Lobby> lobbies = new();
+        public static ClientInfo? waitingClient = null;
+        public static Dictionary<string, Lobby> lobbies = new();
         TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), 8000);
         public void Start()
         {
@@ -24,12 +24,13 @@ namespace Battleships.Backend
 
             while (true)
             {
-                TcpClient client = server.AcceptTcpClient();
-                clients.Add(client, new ClientInfo(Guid.NewGuid().ToString(), "user", false));
+                TcpClient tcpClient = server.AcceptTcpClient();
+                var client = new ClientInfo(Guid.NewGuid().ToString(), "user", false, tcpClient);
+                clients.Add(tcpClient, client);
                 Console.WriteLine("Client connected");
                 PrintConnectedClients();
 
-                NetworkStream stream = client.GetStream();
+                NetworkStream stream = tcpClient.GetStream();
 
                 new Thread(() => HandleClientRequest(stream, client)).Start();
             }
@@ -54,11 +55,11 @@ namespace Battleships.Backend
                 Console.WriteLine(client.Value.uuid);
             }
         }
-        private async void HandleClientRequest(NetworkStream stream, TcpClient client)
+        private async void HandleClientRequest(NetworkStream stream, ClientInfo client)
         {
             try
             {
-                while (client.Connected)
+                while (client.tcpClient.Connected)
                 {
                     RemoveDisconnectedClients(); 
                     var incoming = await Utilities.WaitForRequest(stream);
@@ -88,36 +89,43 @@ namespace Battleships.Backend
             var message = $"📅 {DateTime.Now} 🕛";
             await Utilities.SendResponse(stream, Status.Success, message);
         }
-        private async void HandleMatchmaking(NetworkStream stream, TcpClient client)
+        private async void HandleMatchmaking(NetworkStream stream, ClientInfo client)
         {
-            if (clients[client].isPlaying)
+            if (client.isPlaying)
             {
                 await Utilities.SendResponse(stream, Status.Failure, "", 
                     "Client is already playing!");
                 return;
             }
 
-            if (WaitingClient is null || !WaitingClient.Connected)
+            if (waitingClient is null || !waitingClient.tcpClient.Connected)
             {
-                WaitingClient = client;
+                waitingClient = client;
                 await Utilities.SendResponse(stream, Status.Success, "", 
                     "Waiting for opponent...");
                 return;
             }
 
-            var waitingClientStream = WaitingClient.GetStream();
+            var waitingClientStream = waitingClient.tcpClient.GetStream();
 
-            lobbies.Add(new Lobby("lobby", new List<TcpClient>() { client, WaitingClient}));
+            var lobbyName = Path.GetRandomFileName();
+            while (lobbies.ContainsKey(lobbyName))
+            {
+                lobbyName = Path.GetRandomFileName();
+            }
 
-            await Utilities.SendResponse(stream, Status.Success, 
-                clients[WaitingClient].uuid);
-            await Utilities.SendResponse(waitingClientStream, Status.Success, 
-                clients[client].uuid);
+            lobbies.Add(lobbyName, new Lobby(new Dictionary<ClientInfo, List<int>>() {
+                { client, new List<int>() },
+                { waitingClient, new List<int>() },
+            }));
 
-            clients[WaitingClient].isPlaying = true;
-            clients[client].isPlaying = true;
+            await Utilities.SendResponse(stream, Status.Success, lobbyName);
+            await Utilities.SendResponse(waitingClientStream, Status.Success, lobbyName);
 
-            WaitingClient = null;
+            waitingClient.isPlaying = true;
+            client.isPlaying = true;
+
+            waitingClient = null;
         }
         private async void HandleUnknown(NetworkStream stream)
         {

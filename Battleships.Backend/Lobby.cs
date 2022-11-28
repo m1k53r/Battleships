@@ -9,14 +9,12 @@ namespace Battleships.Backend
 {
     internal class Lobby
     {
-        public string name { get; set; }
-        public List<TcpClient> players { get; set; }
+        public Dictionary<ClientInfo, List<int>> players { get; set; }
         public bool turn { get; set; }
-        public TcpClient? winner;
-        public Lobby(string name, List<TcpClient> players)
+        public ClientInfo? winner;
+        public Lobby(Dictionary<ClientInfo, List<int>> players)
         {
-            this.name = name;
-            this.players = players.OrderBy(x => new Random().Next()).ToList();
+            this.players = players; //.OrderBy(x => new Random().Next()).ToList();
             this.turn = false;
             this.winner = null;
         }
