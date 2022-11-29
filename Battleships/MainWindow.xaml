@@ -20,6 +20,8 @@
             <Button x:Name="StartBtn" Content="Start" Width="100" Height="100" IsEnabled="False" Tag="set" VerticalContentAlignment="Center" Margin="0,20,0,0"/>
         </StackPanel>
         <Rectangle HorizontalAlignment="Center" Height="300" Stroke="Black" VerticalAlignment="Top" Width="10" Fill="White" Margin="130,0,0,0"/>
-        <ListBox x:Name="LogBox" d:ItemsSource="{d:SampleData ItemCount=5}" Height="90" Width="635" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,15"/>
+        <ListBox x:Name="LogBox" d:ItemsSource="{d:SampleData ItemCount=5}" Height="64" Width="635" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,41"/>
+        <TextBox x:Name="Input" Margin="0,0,110,10" Height="24" Width="535" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+        <Button x:Name="SendBtn" Content="Send" Margin="0,0,10,10" Height="24" Width="85" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
     </Grid>
 </Window>

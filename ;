@@ -1,4 +1,4 @@
-﻿using Battleships.Common;
+using Battleships.Common;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -157,29 +157,11 @@ namespace Battleships
         
         public void DestroyShipByCoords(List<Coordinates> coords)
         {
-            var sortedCoords = coords.OrderBy(coord => coord.X).ToList();
-            int shipDir = 1;
-            // If all xs are equal, then dir should be horizontal
-            if (coords.All(cord => cord.X == sortedCoords.First().X))
-            {
-                shipDir = 0;
-            }
-            int firstShipTileId = -1;
+            var sortedCoords = coords.OrderBy(coord => coord.X);
             Opponent.Tiles.ForEach(tile =>
             {
-                if (tile.Coordinates.X == sortedCoords.First().X &&
-                    tile.Coordinates.Y == sortedCoords.First().Y)
-                {
-                    firstShipTileId = tile.Coordinates.Y * 10 + tile.Coordinates.X;
-                } 
+                
             });
-
-            if (firstShipTileId == -1)
-            {
-                Console.WriteLine("Id not found");
-            }
-
-            Window.CheckSurroundings(Opponent, firstShipTileId, coords.Count, shipDir, true, true);
         }
 
         void HandleResponse(Response response)
@@ -219,8 +201,8 @@ namespace Battleships
                         tile.SetHit();
                         break;
                     case Status.DestroyShip:
-                        var coords = JsonConvert.DeserializeObject<List<Coordinates>>(response.data);
-                        DestroyShipByCoords(coords);
+                        var ship = JsonConvert.DeserializeObject<IEnumerable<Coordinates>>(response.data);
+                        DestroyShip(Opponent);
                         break;
                     case Status.ChangeTurn:
                         ChangeTurn();

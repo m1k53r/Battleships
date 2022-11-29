@@ -10,25 +10,19 @@ namespace Battleships.Backend
 {
     internal class Lobby
     {
-        public Dictionary<ClientInfo, List<int>> players { get; set; }
+        public List<ClientInfo> players { get; set; }
         public bool turn { get; set; }
         public ClientInfo? winner;
-        public Lobby(ClientInfo player, string data)
+        public Lobby(ClientInfo player)
         {
-            var ships = DeserializeShips(data);
-            players = new Dictionary<ClientInfo, List<int>>();
-            players.Add(player, ships); 
+            players = new List<ClientInfo>();
+            players.Add(player); 
             turn = Convert.ToBoolean(new Random().Next() % 2); // pick who will start the game
             winner = null;
         }
-        public void Join(ClientInfo player, string data)
+        public void Join(ClientInfo player)
         {
-            var ships = DeserializeShips(data);
-            players.Add(player, ships);
-        }
-        private List<int> DeserializeShips(string data)
-        {
-            return JsonConvert.DeserializeObject<List<int>>(data) ?? new List<int>();
+            players.Add(player);
         }
     }
 }

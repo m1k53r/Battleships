@@ -7,6 +7,12 @@
         Creation,
         Join,
         Message,
+        Shot,
+        Hit,
+        Miss,
+        DestroyShip,
+        ChangeTurn,
+        EndGame,
     }
     public class Response
     {

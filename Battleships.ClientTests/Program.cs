@@ -11,7 +11,6 @@ NetworkStream stream = client.GetStream();
 BeginListen();
 
 string lobbyName = "";
-List<int> ships = new List<int>() { 0, 1, 2 };
 
 while (true)
 {
@@ -50,8 +49,7 @@ async void ReadAndWrite()
 
 async void Matchmaking() 
 {
-    var serializedShips = JsonConvert.SerializeObject(new { ships = ships });
-    await Utilities.SendRequest(stream, Operation.Matchmaking, serializedShips);
+    await Utilities.SendRequest(stream, Operation.Matchmaking, "");
 }
 
 async void SendMessage()

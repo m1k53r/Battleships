@@ -6,6 +6,12 @@
         ReadWrite,
         Matchmaking,
         Message,
+        Shoot,
+        Hit,
+        Miss,
+        DestroyShip,
+        ChangeTurn,
+        EndGame,
     }
     public class Request
     {

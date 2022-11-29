@@ -16,6 +16,7 @@ namespace Battleships.Backend
         public static ClientInfo? waitingClient = null;
         public static Dictionary<string, Lobby> lobbies = new();
         TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), 8000);
+
         public void Start()
         {
             server.Start();
@@ -36,6 +37,8 @@ namespace Battleships.Backend
                 new Thread(() => HandleClientRequest(stream, client)).Start();
             }
         }
+
+        #region debug
         private void RemoveDisconnectedClients()
         {
             List<TcpClient> clientsToRemove = new();
@@ -48,6 +51,7 @@ namespace Battleships.Backend
             }
             clientsToRemove.ForEach(x => clients.Remove(x));
         }
+
         private void PrintConnectedClients()
         {
             Console.WriteLine("Connected clients:");
@@ -56,6 +60,9 @@ namespace Battleships.Backend
                 Console.WriteLine(client.Value.uuid);
             }
         }
+        #endregion
+
+        #region handlers
         private async void HandleClientRequest(NetworkStream stream, ClientInfo client)
         {
             try
@@ -63,19 +70,37 @@ namespace Battleships.Backend
                 while (client.tcpClient.Connected)
                 {
                     RemoveDisconnectedClients(); 
-                    var incoming = await Utilities.WaitForRequest(stream);
-                    Console.WriteLine(incoming.data);
+                    var request = await Utilities.WaitForRequest(stream);
+                    Console.WriteLine(request.data);
 
-                    switch (incoming.operation)
+                    switch (request.operation)
                     {
                         case Operation.ReadWrite:
                             HandleReadWrite(stream);
                             break;
                         case Operation.Matchmaking:
-                            HandleMatchmaking(stream, client, incoming.data);
+                            HandleMatchmaking(stream, client);
                             break;
                         case Operation.Message:
-                            HandleMessage(stream, client, incoming.data);
+                            HandleMessage(stream, client, request.data);
+                            break;
+                        case Operation.Shoot:
+                            HandleRegularPass(stream, client, request.data, Status.Shot);
+                            break;
+                        case Operation.Miss:
+                            HandleRegularPass(stream, client, request.data, Status.Miss);
+                            break;
+                        case Operation.Hit:
+                            HandleRegularPass(stream, client, request.data, Status.Hit);
+                            break;
+                        case Operation.DestroyShip:
+                            HandleRegularPass(stream, client, request.data, Status.DestroyShip);
+                            break;
+                        case Operation.ChangeTurn:
+                            HandleRegularPass(stream, client, request.data, Status.ChangeTurn);
+                            break;
+                        case Operation.EndGame:
+                            HandleRegularPass(stream, client, request.data, Status.EndGame);
                             break;
                         default:
                             HandleUnknown(stream);
@@ -88,12 +113,14 @@ namespace Battleships.Backend
                 HandleException(stream);
             }
         }
+
         private async void HandleReadWrite(NetworkStream stream)
         {
             var message = $"📅 {DateTime.Now} 🕛";
             await Utilities.SendResponse(stream, Status.Success, message);
         }
-        private async void HandleMatchmaking(NetworkStream stream, ClientInfo client, string data)
+
+        private async void HandleMatchmaking(NetworkStream stream, ClientInfo client)
         {
             RemoveDeadLobbies();
             if (client.isPlaying)
@@ -106,21 +133,22 @@ namespace Battleships.Backend
             var lobbyName = FindOpenLobbies();
             if (lobbyName == null)
             {
-                await Utilities.SendResponse(stream, Status.Creation, CreateLobby(client, data), 
+                await Utilities.SendResponse(stream, Status.Creation, CreateLobby(client), 
                     "Waiting for opponent...");
                 return;
             }
 
             var lobby = lobbies[lobbyName];
-            lobby.Join(client, data);
+            lobby.Join(client);
 
-            lobby.players.Keys.ToList().ForEach(async x =>
+            lobby.players.ForEach(async x =>
             {
                 x.isPlaying = true;
                 await Utilities.SendResponse(x.tcpClient.GetStream(), Status.Join, lobbyName);
-                Console.WriteLine(lobby.players[x][1]);
             });
+            await Utilities.SendResponse(lobby.players[0].tcpClient.GetStream(), Status.ChangeTurn, "");
         }
+
         private async void HandleMessage(NetworkStream stream, ClientInfo client, string data)
         {
             if (!client.isPlaying || lobbies.Count == 0)
@@ -130,30 +158,32 @@ namespace Battleships.Backend
                 return;
             }
 
-            Console.WriteLine(data);
-            if (!data.Contains(":"))
-            {
-                await Utilities.SendResponse(stream, Status.Failure, "Error", 
-                    "Wrong data format");
-                return;
-            }
-
-            var message = data.Split(":");
-
-            var opponent = lobbies[message.First()].players.Where(x => x.Key != client).First();
-            await Utilities.SendResponse(opponent.Key.tcpClient.GetStream(), Status.Message, message.Last());
+            (var opponent, var message) = await GetOpponent(stream, client, data);
+            
+            await Utilities.SendResponse(opponent.tcpClient.GetStream(), Status.Message, message);
         }
+
+        private async void HandleRegularPass(NetworkStream stream, ClientInfo client, string data, Status status)
+        {
+            (var opponent, var message) = await GetOpponent(stream, client, data);
+            await Utilities.SendResponse(opponent.tcpClient.GetStream(), status, message);
+        }
+
         private async void HandleUnknown(NetworkStream stream)
         {
             await Utilities.SendResponse(stream, Status.Failure,
                 "Error", "Input was not in a correct format");
         }
+
         private async void HandleException(NetworkStream stream)
         {
             await Utilities.SendResponse(stream, Status.Failure,
                 "Error", "Unexpected error");
         }
-        private string CreateLobby(ClientInfo host, string data)
+        #endregion
+
+        #region helpers
+        private string CreateLobby(ClientInfo host)
         {
             var lobbyName = Path.GetRandomFileName();
             while (lobbies.ContainsKey(lobbyName))
@@ -161,13 +191,13 @@ namespace Battleships.Backend
                 lobbyName = Path.GetRandomFileName().Replace(".", "");
             }
 
-            lobbies.Add(lobbyName, new Lobby(host, data));
+            lobbies.Add(lobbyName, new Lobby(host));
 
             return lobbyName;
         }
+
         private string? FindOpenLobbies()
         {
-
             foreach (var lobby in lobbies)
             {
                 if (lobby.Value.players.Count == 1)
@@ -177,6 +207,7 @@ namespace Battleships.Backend
             }
             return null;
         }
+
         private void RemoveDeadLobbies()
         {
             List<string> lobbyNames = new();
@@ -184,7 +215,7 @@ namespace Battleships.Backend
             {
                 var players = lobby.Value.players;
                 if (players.Count == 0 || 
-                    players.Any(x => !x.Key.tcpClient.Connected))
+                    players.Any(x => !x.tcpClient.Connected))
                 {
                     lobbyNames.Add(lobby.Key); 
                 }
@@ -194,5 +225,22 @@ namespace Battleships.Backend
                 lobbies.Remove(lobbyName);
             }
         }
+        private async Task<(ClientInfo, string)> GetOpponent(NetworkStream stream, ClientInfo client, string data)
+        {
+            Console.WriteLine(data);
+            if (!data.Contains("|"))
+            {
+                await Utilities.SendResponse(stream, Status.Failure, "Error", 
+                    "Wrong data format");
+                return (null, null); 
+            }
+
+            var message = data.Split("|");
+
+            var opponent = lobbies[message.First()].players.Where(x => x != client).First();
+
+            return (opponent, message.Last());
+        }
+        #endregion
     }
 }

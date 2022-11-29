@@ -7,8 +7,10 @@ namespace Battleships.Common
     public class Utilities
     {
         public static async Task<bool> SendRequest(NetworkStream stream, 
-            Operation operation, string data)
+            Operation operation, string data = "", string lobbyName = "")
         {
+            if (stream == null) return false;
+            if (lobbyName != "") data = $"{lobbyName}|{data}";
             try
             {
                 Request request = new Request(operation, data);

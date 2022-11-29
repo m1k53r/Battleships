@@ -247,11 +247,11 @@ namespace Battleships
                     StartBtn.IsEnabled = true;
             }else if (btn.Name.Split('_')[1] == "1" && gm.Turn.Equals(oponent) && gameStarted)
             {
-                gm.Shoot(player, btnId);
+                gm.Shoot(btnId);
             }
             else if(btn.Name.Split('_')[1] == "2" && gm.Turn.Equals(player) && gameStarted)
             {
-                gm.Shoot(oponent, btnId);
+                gm.Shoot(btnId);
             }
         }
 
@@ -314,6 +314,7 @@ namespace Battleships
             InitializeGrid(player, PlayerGrid);
             InitializeGrid(oponent, OponentGrid);
             StartBtn.Click += gm.OnStartGameClick;
+            SendBtn.Click += gm.OnSendButtonClick;
         }
     }
 }
