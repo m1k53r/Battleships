@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Media;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace Battleships
      public class GameManager
     {
         readonly MainWindow Window;
+        BattleshipSoundPlayer SoundPlayer = new BattleshipSoundPlayer();
         Player Player { get; set; }
         Player Oponent { get; set; }
         public Player Turn { get; set; }
@@ -26,8 +28,8 @@ namespace Battleships
 
         public void Shoot(Player target, int btnId)
         {
+            SoundPlayer.PlayFireSound();
             Tile tile = target.Tiles[btnId];
-            Button btn = target.Tiles[btnId].Button;
             if (tile.IsEmpty())
             {
                 tile.SetMiss();
@@ -81,18 +83,20 @@ namespace Battleships
 
             if (allDestroyed)
             {
+                SoundPlayer.PlayBellSound();
                 Window.gameStarted = false;
                 Window.StartBtn.Content = "Play again!";
                 Window.StartBtn.Click -= OnStartGameClick;
                 Window.StartBtn.Click += OnRestartGameClick;
                 Window.StartBtn.IsEnabled = true;
-                Window.LogBox.Items.Insert(0, $"<{DateTime.Now.ToString("HH:mm:d")}> {Turn.Name} won! GG!");
+                Window.LogBox.Items.Insert(0, $"<{DateTime.Now.ToString("HH:mm:ss")}> {Turn.Name} won! GG!");
             }
         }
 
         public void OnStartGameClick(object sender, EventArgs e)
         {
-            Window.LogBox.Items.Insert(0, $"<{DateTime.Now.ToString("HH:mm:d")}> Starting new game! Good luck!");
+            SoundPlayer.PlayBellSound();
+            Window.LogBox.Items.Insert(0, $"<{DateTime.Now.ToString("HH:mm:ss")}> Starting new game! Good luck!");
             foreach (Button btn in Window.ButtonsPanel.Children)
                 btn.IsEnabled = false;
 
