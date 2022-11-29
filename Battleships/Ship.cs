@@ -10,7 +10,7 @@ namespace Battleships
     {
         public string Name { get; }
         public int Length { get; set; }
-        public List<Tile> Tiles{ get; set; }
+        public List<Tile> Tiles { get; set; }
         public int ShipDir { get; } // 0 - up, 1 - right
         public bool IsDestroyed { get; set; }
         public Ship(int length, string name, int shipDir)
