@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Media;
 using System.Net.Sockets;
 using System.Numerics;
 using System.Text;
@@ -17,6 +18,7 @@ namespace Battleships
      public class GameManager
      {
         readonly MainWindow Window;
+        BattleshipSoundPlayer SoundPlayer = new BattleshipSoundPlayer();
         Player Player { get; set; }
         Player Opponent { get; set; }
         public Player Turn { get; set; }
@@ -32,6 +34,7 @@ namespace Battleships
 
         public async void Shoot(int btnId)
         {
+            SoundPlayer.PlayFireSound();
             await Utilities.SendRequest(stream, Operation.Shoot, btnId.ToString(), lobbyName);
         }
 
@@ -93,18 +96,20 @@ namespace Battleships
 
             if (allDestroyed)
             {
+                SoundPlayer.PlayBellSound();
                 Window.gameStarted = false;
                 Window.StartBtn.Content = "Play again!";
                 Window.StartBtn.Click -= OnStartGameClick;
                 Window.StartBtn.Click += OnRestartGameClick;
                 Window.StartBtn.IsEnabled = true;
-                Window.LogBox.Items.Insert(0, $"<{DateTime.Now.ToString("HH:mm:d")}> {Turn.Name} won! GG!");
+                Window.LogBox.Items.Insert(0, $"<{DateTime.Now.ToString("HH:mm:ss")}> {Turn.Name} won! GG!");
                 await Utilities.SendRequest(stream, Operation.EndGame, "", lobbyName);
             }
         }
 
         public async void OnStartGameClick(object sender, EventArgs e)
         {
+            SoundPlayer.PlayBellSound();
             client = new TcpClient();
             client.Connect("127.0.0.1", 8000);
             stream = client.GetStream();
